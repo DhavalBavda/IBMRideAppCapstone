@@ -85,13 +85,18 @@ WSGI_APPLICATION = 'RideHailingApp.wsgi.application'
     #     'NAME': BASE_DIR / 'db.sqlite3',
     # }
 DATABASES = {
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.postgresql',
+    #     'NAME': os.getenv('DB_NAME', 'Ride_hailing_app'),
+    #     'USER': os.getenv('DB_USER', 'postgres'),
+    #     'PASSWORD': os.getenv('DB_PASSWORD', 'admin'),
+    #     'HOST': os.getenv('DB_HOST', 'localhost'),
+    #     'PORT': os.getenv('DB_PORT', '5432'),
+    # }
+    
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv('DB_NAME', 'Ride_hailing_app'),
-        'USER': os.getenv('DB_USER', 'postgres'),
-        'PASSWORD': os.getenv('DB_PASSWORD', 'admin'),
-        'HOST': os.getenv('DB_HOST', 'localhost'),
-        'PORT': os.getenv('DB_PORT', '5432'),
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
 
