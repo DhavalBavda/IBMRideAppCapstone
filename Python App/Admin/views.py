@@ -16,13 +16,6 @@ def Hello(request):
 
 @api_view(['POST'])
 def FareCalculation(request):
-    """
-    Calculate estimated fare between two coordinates using OpenRouteService.
-    Expects JSON body:
-    {
-        "cordinates": [[lon1, lat1], [lon2, lat2]]
-    }
-    """
 
     try:
         # Extract coordinates from request
@@ -60,12 +53,12 @@ def FareCalculation(request):
         data = res.json()
 
         # Extract distance and duration
-        distance_m = data['distances'][0][1]  # from location 1 to location 2
+        distance_m = data['distances'][0][1]  
         duration_s = data['durations'][0][1]
 
         # Fare calculation
-        base_fare = 50       # base fare in INR
-        per_km_rate = 10     # per km fare
+        base_fare = 50      
+        per_km_rate = 10    
         distance_km = distance_m / 1000
         fare = base_fare + (distance_km * per_km_rate)
 
