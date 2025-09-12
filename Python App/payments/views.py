@@ -4,13 +4,19 @@ import uuid
 import json
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-from django.conf import settings
 from .models import Payment
 from wallet.models import Wallet  # since you linked wallet
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
+RAZORPAY_KEY_ID = os.getenv('RAZORPAY_KEY_ID')
+RAZORPAY_KEY_SECRET = os.getenv('RAZORPAY_KEY_SECRET')
 
 # Initialize Razorpay client
 razorpay_client = razorpay.Client(
-    auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_KEY_SECRET)
+    auth=(RAZORPAY_KEY_ID, RAZORPAY_KEY_SECRET)
 )
 
 def Hello(request):
@@ -47,7 +53,8 @@ def create_order(request):
             "payment_id": str(payment.payment_id),
             "amount": razorpay_order["amount"],
             "currency": razorpay_order["currency"],
-            "status": payment.status
+            "status": payment.status,
+            "razorpay_key_id": RAZORPAY_KEY_ID
         })
 
 @csrf_exempt
