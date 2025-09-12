@@ -12,6 +12,8 @@ load_dotenv()
 def Hello(request):
     return Response({"message": "Hello! This is the Admin API endpoint."})
 
+
+
 @api_view(['POST'])
 def FareCalculation(request):
     """
@@ -21,6 +23,7 @@ def FareCalculation(request):
         "cordinates": [[lon1, lat1], [lon2, lat2]]
     }
     """
+
     try:
         # Extract coordinates from request
         cordinates = request.data.get('cordinates')
@@ -43,12 +46,9 @@ def FareCalculation(request):
             "metrics": ["distance", "duration"]
         }
 
-        # Measure start time
-        start_time = time.time()
+     
         res = requests.post(url, json=body, headers=headers)
-        end_time = time.time()
-        execution_time = end_time - start_time
-
+       
         # Check response
         if res.status_code != 200:
             return Response({
@@ -73,7 +73,7 @@ def FareCalculation(request):
             "distance_km": round(distance_km, 2),
             "duration_minutes": round(duration_s / 60, 2),
             "fare_estimate": round(fare, 2),
-            "api_execution_time_s": round(execution_time, 3)
+            
         })
 
     except Exception as e:
