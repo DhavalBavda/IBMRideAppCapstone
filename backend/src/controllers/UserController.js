@@ -3,13 +3,13 @@ import ApiResponse from "../utils/ApiResponse.js";
 import UserService from "../services/UserService.js"
 
 class UserController {
-
-    healthChecker = asyncHandler(async (req, res) => {
-      console.log("in");
-      const user = await UserService.healthCheckerService();
-      res.status(201).json(new ApiResponse(201, user, "Health check successfully"));
-  }); 
-
+  register = asyncHandler(async (req, res) => {
+    const user = await UserService.registerUser(req.body,req.files);
+    return res
+      .status(201)
+      .json(new ApiResponse(201, user, "User registered successfully"));
+  });
 }
+
 
 export default new UserController();

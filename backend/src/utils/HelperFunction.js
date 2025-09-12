@@ -1,9 +1,11 @@
 import mailTranspoter from "../config/mailTranspoter.js";
 import fs from 'fs/promises';
+import fsSync from 'fs';
 import path from "path";
 import { fileURLToPath } from "url";
 import config from "../config/Config.js";
 import firebaseadmin from '../config/firebaseMessage.js'
+import cloudinary from "../config/cloudinary.js";
 
 // recreate __dirname in ESM
 const __filename = fileURLToPath(import.meta.url);
@@ -11,7 +13,7 @@ console.log(__filename);
 const __dirname = path.dirname(__filename);
 console.log(__dirname);
 
-export default class HelperFunction{
+class HelperFunction {
 
     /**
      * Sends an email using a predefined HTML template.
@@ -40,9 +42,8 @@ export default class HelperFunction{
      *   templateData: { username: "John", link: "https://example.com/verify" }
      * });
     */
-    async sendMail({to = [], subject = '', htmlTemplate = '', templateData = {}}){
+    async sendMail({ to = [], subject = '', htmlTemplate = '', templateData = {} }) {
         try {
-
             const templatePath = path.join(__dirname, "..", "assets", "email-templates", htmlTemplate);
 
             // Read HTML file
@@ -50,16 +51,16 @@ export default class HelperFunction{
 
             // Replacing the placeholders (#key# → value)
             for (const [key, value] of Object.entries(templateData)) {
-                const regex = new RegExp(`#${key}#`, "g"); 
+                const regex = new RegExp(`#${key}#`, "g");
                 htmlContent = htmlContent.replace(regex, value);
             }
 
             // Mail options
             const mailOptions = {
-                from : config.SMTP_USER,
-                to : Array.isArray(to) ? to.join(',') : to,
-                subject, 
-                html : htmlContent
+                from: config.SMTP_USER,
+                to: Array.isArray(to) ? to.join(',') : to,
+                subject,
+                html: htmlContent
             }
 
             // send the mail here
@@ -172,6 +173,14 @@ export default class HelperFunction{
         }
     }
 
+
+    async uploadToCloudinary(file, folder) {
+        const result = await cloudinary.uploader.upload(file.path, {
+            folder: `RideApp/${folder}`,
+        });
+        await fs.unlink(file.path); // delete temp file asynchronously
+        return result.secure_url;
+    }
 }
 
 // const HF = new HelperFunction()
@@ -185,3 +194,5 @@ export default class HelperFunction{
 //     }
 // }
 // HF.sendMail(mailObj);
+
+export default new HelperFunction();

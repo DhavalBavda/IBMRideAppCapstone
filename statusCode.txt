@@ -1,0 +1,48 @@
+✅ 1xx – Informational (rare in APIs)
+100 Continue → Initial part of request received, continue sending
+101 Switching Protocols → Used in WebSockets/HTTP2 upgrades
+
+👉 Rarely used directly in Node APIs.
+✅ 2xx – Success
+200 OK → Standard success (GET, PUT, DELETE)
+201 Created → Resource created (POST register, create order, etc.)
+202 Accepted → Request accepted but processing is async (e.g., background job)
+204 No Content → Success but no response body (common for DELETE)
+
+✅ 3xx – Redirection (used in auth flows)
+301 Moved Permanently → Resource moved (rare in APIs)
+302 Found → Temporary redirect (OAuth, login with Google, etc.)
+304 Not Modified → Used with caching (ETag, If-Modified-Since)
+
+✅ 4xx – Client Errors
+400 Bad Request → Invalid syntax, missing fields, wrong format
+401 Unauthorized → No valid authentication (not logged in / invalid token)
+403 Forbidden → Authenticated but not allowed (role-based restrictions)
+404 Not Found → Resource not found (wrong ID, missing route)
+405 Method Not Allowed → Wrong HTTP verb used (POST on a GET route)
+409 Conflict → Resource already exists (duplicate email/phone)
+410 Gone → Resource was deleted and is no longer available
+415 Unsupported Media Type → Wrong Content-Type (expect JSON, got XML)
+422 Unprocessable Entity → Input is semantically wrong (e.g., Aadhaar length invalid)
+429 Too Many Requests → Rate limit exceeded (API throttling)
+
+✅ 5xx – Server Errors
+500 Internal Server Error → Unexpected error/crash
+501 Not Implemented → Endpoint not supported
+502 Bad Gateway → Upstream service failure (reverse proxy, load balancer)
+503 Service Unavailable → Server down/overloaded
+504 Gateway Timeout → Upstream service didn’t respond in time
+
+🚀 Daily Use Status Codes in Node.js APIs
+Here’s what you’ll use most of the time in real projects:
+200 OK → successful GET/PUT/DELETE
+201 Created → successful POST
+204 No Content → delete success
+400 Bad Request → validation errors
+401 Unauthorized → login/token missing/invalid
+403 Forbidden → role-based denial
+404 Not Found → missing resource
+409 Conflict → duplicates
+422 Unprocessable Entity → semantic validation errors
+429 Too Many Requests → rate limiting
+500 Internal Server Error → fallback for unknown errors

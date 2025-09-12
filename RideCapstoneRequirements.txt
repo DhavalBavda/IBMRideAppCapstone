@@ -19,7 +19,7 @@ User Management->
 		delete (deactivate)
 		
 
-Rider Serive->
+Ride Service->
 	fares calulate (python calculation)
 	request ride
 	cancel ride

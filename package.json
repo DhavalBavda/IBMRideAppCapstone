@@ -9,6 +9,7 @@
     "client": "cd frontend && npm start",
     "dev": "concurrently \"npm run server\" \"npm run client\""
   },
+  "type": "module",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/554282003/IBMRideAppCapstone.git"
@@ -21,6 +22,9 @@
   },
   "homepage": "https://github.com/554282003/IBMRideAppCapstone#readme",
   "dependencies": {
+    "bcryptjs": "^3.0.2",
+    "cloudinary": "^2.7.0",
+    "multer": "^2.0.2",
     "nodemon": "^3.1.10"
   }
 }
