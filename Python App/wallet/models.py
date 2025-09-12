@@ -6,13 +6,15 @@ class Wallet(models.Model):
     wallet_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     driver_id = models.UUIDField(editable=False, null=False)
     total_balance = models.DecimalField(max_digits=12, decimal_places=2, default=0, null=False)
+    actual_balance = models.DecimalField(max_digits=12, decimal_places=2, default=0, null=False)
+    a_deduct = models.DecimalField(max_digits=12, decimal_places=2, default=0,null=False)
     is_active = models.BooleanField(default=True, null=False)
     created_at = models.DateTimeField(auto_now_add=True, null=False)
     updated_at = models.DateTimeField(auto_now=True, null=False)
 
     def __str__(self):
         return f"Wallet({self.wallet_id}) - Driver: {self.driver_id} - Balance: {self.total_balance}"
-
+    
 
 
 
