@@ -1,7 +1,7 @@
 import { DataTypes } from "sequelize";
 import { sequelize } from "../config/mysql.js";
 import User from "./User.js";
-import Vehicle from "./vehicleModel.js";
+import Vehicle from "./Vehicle.js";
 
 const Ride = sequelize.define(
     "Ride",

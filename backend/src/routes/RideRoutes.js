@@ -6,18 +6,18 @@ const router = express.Router();
 
 // Rider Routes 
 router.post("/", authMiddleware, authorizeRoles("rider"), RideController.createRide);
-router.get("/:id", authMiddleware, authorizeRoles("rider", "driver", "admin"), RideController.getRide);
-router.get("/", authMiddleware, authorizeRoles("rider", "driver"), RideController.listRides);
 router.get("/ongoing/rider", authMiddleware, authorizeRoles("rider"), RideController.getOngoingRidesForRider);
 router.post("/:id/cancel", authMiddleware, authorizeRoles("rider", "driver"), RideController.cancelRide);
+router.get("/", authMiddleware, authorizeRoles("rider", "driver"), RideController.listRides);
+router.get("/:id", authMiddleware, authorizeRoles("rider", "driver", "admin"), RideController.getRide);
 
 // Driver Routes 
 router.get("/available", authMiddleware, authorizeRoles("driver"), RideController.getAvailableRides);
+router.get("/ongoing/driver", authMiddleware, authorizeRoles("driver"), RideController.getOngoingRides);
+router.get("/history/driver", authMiddleware, authorizeRoles("driver"), RideController.getRideHistory);
 router.post("/:id/accept", authMiddleware, authorizeRoles("driver"), RideController.acceptRide);
 router.post("/:id/start", authMiddleware, authorizeRoles("driver"), RideController.startRide);
 router.post("/:id/complete", authMiddleware, authorizeRoles("driver"), RideController.completeRide);
-router.get("/ongoing/driver", authMiddleware, authorizeRoles("driver"), RideController.getOngoingRides);
-router.get("/history/driver", authMiddleware, authorizeRoles("driver"), RideController.getRideHistory);
 
 // Admin Routes
 router.get("/all", authMiddleware, authorizeRoles("admin"), RideController.getAllRides);
