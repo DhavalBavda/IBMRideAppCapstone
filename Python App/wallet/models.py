@@ -38,7 +38,7 @@ class Transaction(models.Model):
     transaction_type = models.CharField(max_length=10, choices=TRANSACTION_TYPE_CHOICES)
     amount = models.DecimalField(max_digits=12, decimal_places=2)
     reference_payment = models.ForeignKey("payments.Payment", null=True, blank=True, on_delete=models.SET_NULL)
-    description = models.TextField(blank=True, null=True)  # "Ride completed", "Withdrawal initiated"
+    description = models.TextField(blank=True, null=True)  
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

@@ -2,8 +2,8 @@ from django.shortcuts import render, HttpResponse
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from .models import Wallet
-from .serializers import WalletSerializer
+from .models import Wallet,Withdraw
+from .serializers import WalletSerializer,WithdrawSerializer
 from django.shortcuts import get_object_or_404
 
 # Create your views here.
@@ -47,8 +47,45 @@ class Wallet_Oprs(APIView):
         
         return Response({"detail": "Wallet is already deactivated"}, status=status.HTTP_400_BAD_REQUEST)
 
+class Withdraw_Oprs(APIView):
+    # Get all withdrawals for a driver's wallet
+    def get(self, request, driver_id=None):
+        wallet = get_object_or_404(Wallet, driver_id=driver_id)
+        withdrawals = Withdraw.objects.filter(wallet=wallet)
+        serializer = WithdrawSerializer(withdrawals, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
-    
+    # Create a new withdrawal request
+    def post(self, request, driver_id):
+        wallet = Wallet.objects.filter(driver_id=driver_id).first()
+        if not wallet:
+            return Response({'details': 'Wallet Not Found'}, status=status.HTTP_404_NOT_FOUND)
 
+        # ✅ Use wallet object directly
+        withdrawal = Withdraw.objects.create(
+            wallet=wallet,  # ✅ correct way
+            amount=request.data.get('amount'),
+            account_holder_name=request.data.get('account_holder_name'),
+            bank_name=request.data.get('bank_name'),
+            ifsc_code=request.data.get('ifsc_code'),
+            account_number=request.data.get('account_number'),
+            contact_info=request.data.get('contact_info')
+        )
 
+        serializer = WithdrawSerializer(withdrawal)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
+    # Update withdrawal status (PATCH)
+    def patch(self, request, withdraw_id):
+        print(withdraw_id)
+        withdrawal = get_object_or_404(Withdraw, withdraw_id=withdraw_id)
+
+        new_status = request.data.get('status')
+        if not new_status:
+            return Response({'details': 'Status is required'}, status=status.HTTP_400_BAD_REQUEST)
+
+        withdrawal.status = new_status
+        withdrawal.save()
+
+        serializer = WithdrawSerializer(withdrawal)
+        return Response(serializer.data, status=status.HTTP_200_OK)
