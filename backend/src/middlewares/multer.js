@@ -2,7 +2,7 @@ import multer from "multer";
 import path from "path";
 import fs from "fs";
 
-// ✅ Absolute path to backend/uploads
+// Absolute path to backend/uploads
 const uploadPath = path.join(process.cwd(), "backend", "uploads");
 
 // Ensure uploads folder exists

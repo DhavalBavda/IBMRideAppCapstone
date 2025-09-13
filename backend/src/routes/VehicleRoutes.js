@@ -7,7 +7,7 @@ const router = express.Router();
 // Vehicle management
 router.post("/register", VehicleController.registerVehicle);
 router.put("/update/:id", VehicleController.updateVehicle);
-router.delete("deactivate/:id", VehicleController.deactivateVehicle);
+router.patch("/delete/:id", VehicleController.deactivateVehicle);
 
 
 router.get("/driver/:driverId", VehicleController.getVehiclesByDriver);

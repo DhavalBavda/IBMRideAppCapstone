@@ -6,7 +6,7 @@ import {uploadMultiple} from "../middlewares/multer.js";
 const router = express.Router();
 
 // Public
-router.post("/register", uploadMultiple , userController.register);       // Rider/Driver/Admin Register
+router.post("/register" , uploadMultiple, userController.register);       // Rider/Driver/Admin Register
 // router.post("/login", userController.login);
 // router.post("/forgot-password", userController.forgotPassword);
 // router.post("/reset-password", userController.resetPassword);

@@ -14,6 +14,7 @@ import userRoute from "./routes/UserRoutes.js";
 import vehicleRoute from "./routes/VehicleRoutes.js";
 import deviceRouter from "./routes/DeviceTokenRoutes.js";
 import rideRoute from "./routes/RideRoutes.js"
+import driverRoute from "./routes/DriverRoutes.js"
 
 app.use("/user", userRoute); //User Routes
 app.use("/vehicle", vehicleRoute); //Vehicle Routes

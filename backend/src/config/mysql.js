@@ -44,7 +44,8 @@ const checkMySqlConnection = async () => {
 
 const syncSqlDatabase = async () => {
   try {
-    await sequelize.sync({force: true}); 
+    // await sequelize.sync({force: true}); 
+    await sequelize.sync(); 
     console.log("MySQL database synchronized successfully.");
   } catch (error) {
     console.error(" Error syncing database:", error.message);

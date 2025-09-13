@@ -15,7 +15,7 @@ class VehicleController {
 
   deactivateVehicle = asyncHandler(async (req, res) => {
     await VehicleService.deactivateVehicle(req.params.id);
-    res.status(200).json(new ApiResponse(200, null, "Vehicle deactivated successfully"));
+    res.status(200).json(new ApiResponse(200, null, "Vehicle deleted successfully"));
   });
 
   getVehiclesByDriver = asyncHandler(async (req, res) => {

@@ -1,6 +1,6 @@
 import { DataTypes } from "sequelize";
 import { sequelize } from "../config/mysql.js";
-import User from "./user.js";
+import User from "./User.js";
 
 const Vehicle = sequelize.define(
   "Vehicle",
@@ -36,7 +36,7 @@ const Vehicle = sequelize.define(
       validate: {
         isInt: true,
         min: 1990,
-        max: new Date().getFullYear() + 1, 
+        max: new Date().getFullYear() + 1,
       },
     },
     color: {
@@ -70,11 +70,15 @@ const Vehicle = sequelize.define(
       defaultValue: "active",
       validate: { isIn: [["active", "inactive"]] },
     },
+    is_deleted: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+    },
   },
   {
     tableName: "vehicles",
-    timestamps: true, 
-    paranoid: true,  
+    timestamps: true,
+    paranoid: true,
     underscored: true,
     indexes: [
       { fields: ["owner_id"], name: "idx_owner_id" },
