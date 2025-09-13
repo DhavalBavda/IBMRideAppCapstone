@@ -141,36 +141,36 @@ class HelperFunction {
      *   ["token1", "token2"]
      * );
     */
-    // async sendFirebasePushNotification(messageObj, deviceTokens) {
-    //     try {
-    //         if (!Array.isArray(deviceTokens) || deviceTokens.length === 0) {
-    //             throw new Error("No device tokens provided for push notification");
-    //         }
+    async sendFirebasePushNotification(messageObj, deviceTokens) {
+        try {
+            if (!Array.isArray(deviceTokens) || deviceTokens.length === 0) {
+                throw new Error("No device tokens provided for push notification");
+            }
 
-    //         const message = {
-    //             notification: { ...messageObj },
-    //             tokens: deviceTokens,
-    //         };
+            const message = {
+                notification: { ...messageObj },
+                tokens: deviceTokens,
+            };
 
-    //         const response = await firebaseadmin.messaging().sendEachForMulticast(message);
+            const response = await firebaseadmin.messaging().sendEachForMulticast(message);
 
-    //         console.log(`Push notification sent: ${response.successCount} success, ${response.failureCount} failures`);
+            console.log(`Push notification sent: ${response.successCount} success, ${response.failureCount} failures`);
 
-    //         // log failed tokens for cleanup
-    //         if (response.failureCount > 0) {
-    //             response.responses.forEach((res, idx) => {
-    //                 if (!res.success) {
-    //                     console.error(`Failed token[${idx}]: ${deviceTokens[idx]} | Error:`, res.error?.message);
-    //                 }
-    //             });
-    //         }
+            // log failed tokens for cleanup
+            if (response.failureCount > 0) {
+                response.responses.forEach((res, idx) => {
+                    if (!res.success) {
+                        console.error(`Failed token[${idx}]: ${deviceTokens[idx]} | Error:`, res.error?.message);
+                    }
+                });
+            }
 
-    //         return response;
-    //     } catch (error) {
-    //         console.error("Error sending push notification:", error.message);
-    //         throw error;
-    //     }
-    // }
+            return response;
+        } catch (error) {
+            console.error("Error sending push notification:", error.message);
+            throw error;
+        }
+    }
 
 
 async uploadToCloudinary(file, folder) {

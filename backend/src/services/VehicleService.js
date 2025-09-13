@@ -60,12 +60,16 @@ class VehicleService {
     });
   }
 
-  async updateVehicle(id, data) {
+  async updateVehicle(id, data, currentUser) {
     // First fetch the vehicle
     const vehicle = await VehicleRepository.findById(id);
 
     if (!vehicle) {
       throw new ApiError(404, "Vehicle not found");
+    }
+
+    if (currentUser.role === "driver" && currentUser.id !== vehicle.owner_id) {
+      throw new ApiError(403, "You cannot update another driver’s vehicle");
     }
 
     // deleted can't change

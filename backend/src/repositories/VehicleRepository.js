@@ -23,12 +23,6 @@ class VehicleRepository {
     return await vehicle.update(data);
   }
 
-  // async softDeleteVehicle(id) {
-  //   const vehicle = await Vehicle.findByPk(id);
-  //   if (!vehicle) return null;
-  //   return await vehicle.update({ status: "inactive" });
-  // }
-
   // Soft delete
   async softDeleteVehicle(id) {
     const vehicle = await Vehicle.findByPk(id);
@@ -39,15 +33,15 @@ class VehicleRepository {
     });
   }
 
-  // Reactivate (admin or explicit endpoint)
-  async reactivateVehicle(id) {
-    const vehicle = await Vehicle.findByPk(id);
-    if (!vehicle) return null;
-    return await vehicle.update({
-      status: "active",
-      is_deleted: false,
-    });
-  }
+  // Reactivate (admin)
+  // async reactivateVehicle(id) {
+  //   const vehicle = await Vehicle.findByPk(id);
+  //   if (!vehicle) return null;
+  //   return await vehicle.update({
+  //     status: "active",
+  //     is_deleted: false,
+  //   });
+  // }
 }
 
 export default new VehicleRepository();
