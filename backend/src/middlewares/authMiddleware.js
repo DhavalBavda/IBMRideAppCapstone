@@ -1,6 +1,7 @@
 // middlewares/auth.middleware.js
 import jwt from "jsonwebtoken";
 import ApiError from "../utils/ApiError.js";
+import Config from "../config/Config.js";
 
 export const authenticateJWT = (req, res, next) => {
   let token = req.headers.authorization?.startsWith("Bearer ")
@@ -16,7 +17,7 @@ export const authenticateJWT = (req, res, next) => {
   }
 
   try {
-    const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+    const decoded = jwt.verify(token, Config.JWT_SECRET);
     req.user = decoded; // attach user info to request
     next();
   } catch (err) {

@@ -1,6 +1,5 @@
 import mailTranspoter from "../config/mailTranspoter.js";
 import fs from 'fs/promises';
-import fsSync from 'fs';
 import path from "path";
 import { fileURLToPath } from "url";
 import config from "../config/Config.js";
@@ -174,14 +173,22 @@ class HelperFunction {
     // }
 
 
-    async uploadToCloudinary(file, folder) {
-        const result = await cloudinary.uploader.upload(file.path, {
-            folder: `RideApp/${folder}`,
-        });
-        await fs.unlink(file.path); // delete temp file asynchronously
-        return result.secure_url;
+async uploadToCloudinary(file, folder) {
+    if (!file || !file.buffer) {
+      throw new Error("Invalid file object: buffer missing");
     }
-}
+
+    return new Promise((resolve, reject) => {
+      const stream = cloudinary.uploader.upload_stream(
+        { folder: `RideApp/${folder}` },
+        (error, result) => {
+          if (error) reject(error);
+          else resolve(result.secure_url);
+        }
+      );
+      stream.end(file.buffer); // send buffer directly
+    });
+} }
 
 // const HF = new HelperFunction()
 // let mailObj = {
