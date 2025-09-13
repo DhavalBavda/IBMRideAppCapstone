@@ -26,7 +26,7 @@ SECRET_KEY = os.getenv("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv("DEBUG", "False").lower() == "true"
 
-ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "").split(",") if os.getenv("ALLOWED_HOSTS") else []
+ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "").split(",") if os.getenv("ALLOWED_HOSTS") else ['192.168.0.229', '127.0.0.1', 'localhost']
 
 
 # Application definition
@@ -58,6 +58,9 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'payments.middleware.CsrfExemptMiddleware',
 ]
+
+ 
+
 
 CORS_ALLOW_ALL_ORIGINS = True
 ROOT_URLCONF = 'RideHailingApp.urls'

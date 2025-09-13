@@ -1,10 +1,16 @@
-from django.shortcuts import render
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 import requests
 import os
 from dotenv import load_dotenv
-import time
+
+
+from rest_framework import status, generics
+from rest_framework.views import APIView
+from rest_framework.permissions import IsAuthenticated
+from .models import Admin
+from .serializers import AdminSerializer, AdminLoginSerializer,AdminUpdateSerializer 
+from rest_framework.permissions import AllowAny 
 
 load_dotenv()
 
@@ -12,6 +18,34 @@ load_dotenv()
 def Hello(request):
     return Response({"message": "Hello! This is the Admin API endpoint."})
 
+
+# Register Admin
+class RegisterAdminView(generics.CreateAPIView):
+    queryset = Admin.objects.all()
+    serializer_class = AdminSerializer
+
+
+# Login Admin
+class LoginAdminView(APIView):
+    def post(self, request):
+        serializer = AdminLoginSerializer(data=request.data)
+        if serializer.is_valid():
+            admin = serializer.validated_data
+            return Response({
+                "message": "Login successful",
+                "admin": AdminSerializer(admin).data
+            }, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class AdminDetailView(generics.RetrieveUpdateAPIView):
+    queryset = Admin.objects.all()
+    serializer_class = AdminUpdateSerializer
+    lookup_field = 'email'
+
+
+ 
+ 
 
 
 @api_view(['POST'])
