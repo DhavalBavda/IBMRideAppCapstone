@@ -15,7 +15,12 @@ class Wallet(models.Model):
     def __str__(self):
         return f"Wallet({self.wallet_id}) - Driver: {self.driver_id} - Balance: {self.total_balance}"
     
-
+    def apply_pending_deduction(self):
+        if self.a_deduct > 0 and self.actual_balance >= self.a_deduct:
+            self.actual_balance -= self.a_deduct
+            # send self.a_deduct to admin
+            self.a_deduct = 0
+            self.save()
 
 
 
