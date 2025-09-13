@@ -1,7 +1,7 @@
 
 from django.urls import path
 
-from .views import Hello,FareCalculation, RegisterAdminView, LoginAdminView, AdminDetailView,AddOtherAdminView
+from .views import Hello,FareCalculation, RegisterAdminView, LoginAdminView, AdminDetailView
 
 
 
