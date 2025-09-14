@@ -47,23 +47,7 @@ class CreateOrderView(APIView):
                 payment_method=data['payment_method'],
                 status='PENDING',
                 transaction_meta_data=razorpay_order
-            )
-
-             # ✅ Update wallet balances
-            # You may decide business logic: e.g., total_balance += amount, actual_balance += amount
-            if data['payment_method']!="CASH":
-                wallet.actual_balance = float(wallet.actual_balance) + float(data['amount'])
-            else :
-                if wallet.actual_balance==float(0):
-
-                    wallet.a_deduct=float(wallet.a_deduct)+float((int(data['amount'])/100)*5)
-                else :
-                    wallet.actual_balance= float(wallet.actual_balance) -float((int(data['amount'])/100)*5)
-            wallet.total_balance = float(wallet.total_balance) + float(data['amount'])
-
-            wallet.updated_at = timezone.now()
-            wallet.save()
-            
+            )            
 
             return Response({
                 "order_id": razorpay_order['id'],
