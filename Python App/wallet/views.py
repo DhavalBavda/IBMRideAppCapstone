@@ -6,6 +6,8 @@ from .models import Wallet,Withdraw
 from .serializers import WalletSerializer,WithdrawSerializer
 from django.shortcuts import get_object_or_404
 
+ 
+from decimal import Decimal
 # Create your views here.
 def Hello(request):
     return HttpResponse("<H1>Hello This is the Wallet Apis End Point</h1>")
@@ -89,3 +91,47 @@ class Withdraw_Oprs(APIView):
 
         serializer = WithdrawSerializer(withdrawal)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+
+
+class Admin_Bonus(APIView):
+    def post(self, request, wallet_id=None):
+        try:
+            amount = request.data.get("amount")
+            if not amount:
+                return Response({"error": "Amount is required"}, status=status.HTTP_400_BAD_REQUEST)
+
+            # Convert amount to Decimal
+            amount = Decimal(amount)
+
+            if wallet_id:
+                wallet = Wallet.objects.filter(wallet_id=wallet_id,is_active=True).first()
+                if not wallet:
+                    return Response({"error": "Wallet not found"}, status=status.HTTP_404_NOT_FOUND)
+
+                # Deduct adjustment if any
+                if wallet.a_deduct > 0:
+                    wallet.actual_balance = amount - wallet.a_deduct if wallet.a_deduct < amount else Decimal(0)
+                    wallet.a_deduct = wallet.a_deduct - amount if wallet.a_deduct > amount else Decimal(0)
+
+                # Add bonus amount
+                wallet.actual_balance += amount
+                wallet.total_balance += amount
+                wallet.save()
+            
+            else:
+                # Bulk update for all active wallets
+                wallets = Wallet.objects.filter(is_active=True)
+                for wallet in wallets:
+                    if wallet.a_deduct > 0:
+                        wallet.actual_balance = amount - wallet.a_deduct if wallet.a_deduct < amount else Decimal(0)
+                        wallet.a_deduct = Decimal(0)
+                    wallet.actual_balance += amount
+                    wallet.total_balance += amount
+                    wallet.save()
+
+            return Response({"message": "Bonus added successfully"}, status=status.HTTP_200_OK)
+
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
