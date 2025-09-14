@@ -24,3 +24,8 @@ class VerifyPaymentSerializer(serializers.Serializer):
     razorpay_order_id = serializers.CharField(min_length=10)
     razorpay_payment_id = serializers.CharField(min_length=10)
     razorpay_signature = serializers.CharField(min_length=10)
+
+class PaymentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Payment
+        fields = ['payment_id', 'wallet', 'ride_id', 'rider_id', 'driver_id', 'amount', 'payment_method', 'status', 'created_at']

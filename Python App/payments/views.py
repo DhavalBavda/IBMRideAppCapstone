@@ -10,6 +10,8 @@ from wallet.models import Wallet
 from .serializers import CreateOrderSerializer, VerifyPaymentSerializer
 import uuid
 from django.utils import timezone
+from rest_framework.generics import ListAPIView
+from .serializers import PaymentSerializer
 
 
 load_dotenv()
@@ -102,3 +104,7 @@ class VerifyPaymentView(APIView):
 class CheckoutPageView(APIView):
     def get(self, request):
         return render(request, 'payments/checkout.html')
+
+class CompletedPaymentsView(ListAPIView):
+    queryset = Payment.objects.filter(status='SUCCESS')
+    serializer_class = PaymentSerializer
