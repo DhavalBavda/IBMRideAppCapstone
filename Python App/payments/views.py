@@ -107,4 +107,5 @@ class CheckoutPageView(APIView):
 
 class CompletedPaymentsView(ListAPIView):
     queryset = Payment.objects.filter(status='SUCCESS')
+    print(queryset)
     serializer_class = PaymentSerializer
