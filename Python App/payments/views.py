@@ -73,6 +73,11 @@ class VerifyPaymentView(APIView):
         data = serializer.validated_data
 
         try:
+            # Fetch exact Payment using payment_id
+            payment_id = request.data.get("payment_id")
+            if not payment_id:
+                return Response({"error": "Payment ID missing"}, status=status.HTTP_400_BAD_REQUEST)
+
             # Verify signature
             params_dict = {
                 'razorpay_order_id': data['razorpay_order_id'],
@@ -81,11 +86,7 @@ class VerifyPaymentView(APIView):
             }
             razorpay_client.utility.verify_payment_signature(params_dict)
 
-            # Fetch exact Payment using payment_id
-            payment_id = request.data.get("payment_id")
-            if not payment_id:
-                return Response({"error": "Payment ID missing"}, status=status.HTTP_400_BAD_REQUEST)
-
+    
             payment = Payment.objects.get(payment_id=payment_id)
             payment.status = 'SUCCESS'
             payment.transaction_meta_data.update(data)
