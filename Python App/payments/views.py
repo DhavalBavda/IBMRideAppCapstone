@@ -52,6 +52,7 @@ class CreateOrderView(APIView):
             )            
 
             return Response({
+                "ride_id": str(payment.ride_id),
                 "order_id": razorpay_order['id'],
                 "payment_id": str(payment.payment_id),
                 "amount": razorpay_order['amount'],
@@ -74,10 +75,13 @@ class VerifyPaymentView(APIView):
 
         try:
             # Fetch exact Payment using payment_id
+            ride_id = request.data.get("ride_id")
             payment_id = request.data.get("payment_id")
             if not payment_id:
                 return Response({"error": "Payment ID missing"}, status=status.HTTP_400_BAD_REQUEST)
-
+            if not ride_id:
+                return Response({"error": "Ride_id missing"})
+            
             # Verify signature
             params_dict = {
                 'razorpay_order_id': data['razorpay_order_id'],
@@ -95,7 +99,7 @@ class VerifyPaymentView(APIView):
             # Update wallet balances
             payment.process_wallet_update()
 
-            return Response({"message": "Payment verified successfully", "status": "SUCCESS"})
+            return Response({"message": "Payment verified successfully", "status": "SUCCESS", "ride_id":ride_id})
 
         except Payment.DoesNotExist:
             return Response({"error": "Payment not found"}, status=status.HTTP_400_BAD_REQUEST)
@@ -107,6 +111,8 @@ class CheckoutPageView(APIView):
         return render(request, 'payments/checkout.html')
 
 class CompletedPaymentsView(ListAPIView):
-    queryset = Payment.objects.filter(status='SUCCESS')
-    print(queryset)
     serializer_class = PaymentSerializer
+
+    def get_queryset(self):
+        return Payment.objects.filter(status='SUCCESS')
+
