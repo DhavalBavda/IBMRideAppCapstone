@@ -8,6 +8,7 @@ urlpatterns = [
     path('driver-wallet/<uuid:driver_id>/', Wallet_Oprs.as_view(), name="wallet-operations"),
      
     path('withdraw/<uuid:driver_id>/', Withdraw_Oprs.as_view(), name='withdraw-list-create'),
+    path('withdraw/', Withdraw_Oprs.as_view(), name='get_all_withdraw_req'),
 
     path('withdraw/status/<uuid:withdraw_id>/', Withdraw_Oprs.as_view(), name='withdraw-update-status'),
 
