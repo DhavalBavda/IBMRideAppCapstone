@@ -6,4 +6,5 @@ urlpatterns = [
     path('verify-payment/', VerifyPaymentView.as_view(), name='verify_payment'),
     path('checkout/', CheckoutPageView.as_view(), name='checkout_page'),
     path('completed-payments/', CompletedPaymentsView.as_view(), name='completed_payments'),
+    
 ]
