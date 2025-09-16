@@ -66,15 +66,38 @@ class Withdraw_Oprs(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     # Create a new withdrawal request
+   
     def post(self, request, driver_id):
         wallet = Wallet.objects.filter(driver_id=driver_id).first()
         if not wallet:
             return Response({'details': 'Wallet Not Found'}, status=status.HTTP_404_NOT_FOUND)
 
-        # ✅ Use wallet object directly
+        # ✅ Safely convert amount to float (or Decimal)
+        try:
+            amount = float(request.data.get('amount', 0))
+        except (TypeError, ValueError):
+            return Response({"details": "Invalid amount provided"}, status=status.HTTP_400_BAD_REQUEST)
+
+        if amount <= 0:
+            return Response({"details": "Amount must be greater than zero"}, status=status.HTTP_400_BAD_REQUEST)
+
+        if amount > wallet.actual_balance:
+            return Response(
+                {"details": f"Enter a lesser amount. You have only {wallet.actual_balance} in your account."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        # ✅ Check if there is already a pending withdrawal request
+        if Withdraw.objects.filter(wallet=wallet, status="REQUESTED").exists():
+            return Response(
+                {"details": "Wait for the completion or rejection of the request you already made."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        # ✅ Create withdrawal
         withdrawal = Withdraw.objects.create(
-            wallet=wallet,  # ✅ correct way
-            amount=request.data.get('amount'),
+            wallet=wallet,
+            amount=amount,
             account_holder_name=request.data.get('account_holder_name'),
             bank_name=request.data.get('bank_name'),
             ifsc_code=request.data.get('ifsc_code'),
