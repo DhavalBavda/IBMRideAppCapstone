@@ -49,9 +49,17 @@ class Wallet_Oprs(APIView):
         
         return Response({"detail": "Wallet is already deactivated"}, status=status.HTTP_400_BAD_REQUEST)
 
+
 class Withdraw_Oprs(APIView):
     # Get all withdrawals for a driver's wallet
     def get(self, request, driver_id=None):
+        if driver_id==None:
+            
+            withdrawals = Withdraw.objects.all()
+            serializer = WithdrawSerializer(withdrawals, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+
+
         wallet = get_object_or_404(Wallet, driver_id=driver_id)
         withdrawals = Withdraw.objects.filter(wallet=wallet)
         serializer = WithdrawSerializer(withdrawals, many=True)
