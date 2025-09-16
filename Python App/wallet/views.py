@@ -55,7 +55,7 @@ class Withdraw_Oprs(APIView):
     def get(self, request, driver_id=None):
         if driver_id==None:
             
-            withdrawals = Withdraw.objects.all()
+            withdrawals = Withdraw.objects.filter(status="REQUESTED")
             serializer = WithdrawSerializer(withdrawals, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -107,23 +107,35 @@ class Withdraw_Oprs(APIView):
 
         serializer = WithdrawSerializer(withdrawal)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
-
-    # Update withdrawal status (PATCH)
     def patch(self, request, withdraw_id):
-        
-        print(withdraw_id)
-        
         withdrawal = get_object_or_404(Withdraw, withdraw_id=withdraw_id)
-
         new_status = request.data.get('status')
+
         if not new_status:
             return Response({'details': 'Status is required'}, status=status.HTTP_400_BAD_REQUEST)
 
+        # ✅ Update status
         withdrawal.status = new_status
         withdrawal.save()
 
+        wallet = withdrawal.wallet
+
+        # ✅ Deduct only if status is COMPLETED
+        if new_status.upper() == "COMPLETED":
+            if wallet.actual_balance >= withdrawal.amount:
+                wallet.actual_balance -= withdrawal.amount
+                wallet.save()
+
+            
+            else:
+                return Response(
+                    {"details": "Insufficient wallet balance to complete withdrawal"},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+
         serializer = WithdrawSerializer(withdrawal)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
 
 
 
