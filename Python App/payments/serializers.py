@@ -3,17 +3,17 @@ from .models import Payment
 from wallet.models import Wallet
 
 class CreateOrderSerializer(serializers.Serializer):
-    wallet_id = serializers.UUIDField()
+    # wallet_id = serializers.UUIDField()
     ride_id = serializers.UUIDField()
     rider_id = serializers.UUIDField()
     driver_id = serializers.UUIDField()
     amount = serializers.DecimalField(max_digits=12, decimal_places=2)
     payment_method = serializers.ChoiceField(choices=Payment.PAYMENT_METHOD_CHOICES, default='CARD')
 
-    def validate_wallet_id(self, value):
-        if not Wallet.objects.filter(wallet_id=value).exists():
-            raise serializers.ValidationError("Wallet not found")
-        return value
+    # def validate_wallet_id(self, value):
+    #     if not Wallet.objects.filter(wallet_id=value).exists():
+    #         raise serializers.ValidationError("Wallet not found")
+    #     return value
 
     def validate_amount(self, value):
         if value <= 0:

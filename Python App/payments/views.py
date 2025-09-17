@@ -23,8 +23,8 @@ RAZORPAY_KEY_SECRET = os.getenv('RAZORPAY_KEY_SECRET')
 razorpay_client = razorpay.Client(auth=(RAZORPAY_KEY_ID, RAZORPAY_KEY_SECRET))
 
 class CreateOrderView(APIView):
-    permission_classes = []  # Allow any
-    authentication_classes = []  # No authentication required
+    permission_classes = []
+    authentication_classes = []
 
     def post(self, request):
         try:
@@ -32,7 +32,11 @@ class CreateOrderView(APIView):
             serializer.is_valid(raise_exception=True)
             data = serializer.validated_data
 
-            wallet = Wallet.objects.get(wallet_id=data['wallet_id'])
+            # Fetch wallet dynamically
+            wallet = Wallet.objects.filter(driver_id=data['driver_id']).first()
+            if not wallet:
+                return Response({"error": "Wallet not found for this driver"}, status=400)
+
             amount_in_paise = int(float(data['amount']) * 100)
 
             razorpay_order = razorpay_client.order.create({
@@ -50,7 +54,7 @@ class CreateOrderView(APIView):
                 payment_method=data['payment_method'],
                 status='PENDING',
                 transaction_meta_data=razorpay_order
-            )            
+            )
 
             return Response({
                 "ride_id": str(payment.ride_id),
@@ -62,8 +66,6 @@ class CreateOrderView(APIView):
                 "razorpay_key_id": RAZORPAY_KEY_ID
             })
 
-        except Wallet.DoesNotExist:
-            return Response({"error": "Wallet not found"}, status=400)
         except Exception as e:
             return Response({"error": str(e)}, status=400)
 
@@ -125,3 +127,44 @@ class GetPaymentDetails(APIView):
             return Response(serializer.data, status=status.HTTP_200_OK)
         else:
             return Response({"error": "Ride ID is required"}, status=status.HTTP_400_BAD_REQUEST)
+
+class CreateCashPaymentView(APIView):
+    permission_classes = []  # optional auth
+
+    def post(self, request):
+        try:
+            ride_id = request.data.get("ride_id")
+            rider_id = request.data.get("rider_id")
+            driver_id = request.data.get("driver_id")
+            amount = request.data.get("amount")
+
+            if not all([ride_id, rider_id, driver_id, amount]):
+                return Response({"error": "Missing required data"}, status=400)
+
+            wallet = Wallet.objects.filter(driver_id=driver_id).first()
+            if not wallet:
+                return Response({"error": "Wallet not found for this driver"}, status=400)
+
+            # Create Payment with CASH method
+            payment = Payment.objects.create(
+                wallet=wallet,
+                ride_id=ride_id,
+                rider_id=rider_id,
+                driver_id=driver_id,
+                amount=amount,
+                payment_method="CASH",
+                status="SUCCESS"
+            )
+
+            # Apply wallet logic (same as process_wallet_update)
+            payment.process_wallet_update()
+
+            return Response({
+                "payment_id": str(payment.payment_id),
+                "ride_id": str(payment.ride_id),
+                "amount": str(payment.amount),
+                "status": payment.status
+            }, status=201)
+
+        except Exception as e:
+            return Response({"error": str(e)}, status=400)
