@@ -474,3 +474,133 @@ nav a.active {
   font-size: 15px;
   cursor: pointer;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* ----------------- Update Vehicle Form ----------------- */
+#updateForm .form-group {
+  display: flex;
+  align-items: center;
+ 
+}
+
+#updateForm .form-group label {
+  flex: 0 0 180px;   /* fixed width column */
+  font-weight: 550;
+  margin-right: 1rem;
+  text-align: left;  /* 🔹 align field names to left */
+}
+
+#updateForm .form-group input {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #aaa;
+  border-radius: 6px;
+  font-size: 15px;
+  background: #f9fbff;
+}
+
+#updateForm .actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 20px;
+}
+
+#updateForm .actions button {
+  padding: 0.6rem 1.2rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 15px;
+}
+
+#updateForm .actions button[type="submit"] {
+  background: #7180b2;
+  color: white;
+}
+
+#updateForm .actions button[type="button"] {
+  background: #7180b2;
+  color: white;
+}
+
+
+
+
+
+
+/* Reuse same alignment from update form */
+#registerVehicle .form-group {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+#registerVehicle .form-group label {
+  flex: 0 0 180px;   /* fixed width for labels */
+  font-weight: 550;
+  margin-right: 1rem;
+  text-align: left;
+}
+
+#registerVehicle .form-group input,
+#registerVehicle .form-group select {
+  flex: 1;
+  padding: 12px;
+  border: 1px solid #aaa;
+  border-radius: 6px;
+  font-size: 15px;
+  background: #f9fbff;
+}
+
+#registerVehicle .actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 20px;
+}
+
+#registerVehicle .actions button {
+  padding: 0.6rem 1.2rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 15px;
+}
+
+/* Register (same as Update) */
+#registerVehicle .actions button[type="submit"] {
+  background: #7180b2;
+  color: white;
+}
+
+/* Clear (same as Close in update form) */
+#registerVehicle .actions button[type="reset"] {
+  background: #7180b2;
+  color: white;
+}
+
+/* Close (same as Close in update form) */
+#registerVehicle .actions button[type="button"] {
+  background: #7180b2;
+  color: white;
+}

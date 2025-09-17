@@ -1,31 +1,51 @@
-
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <title>Update Vehicle</title>
   <link rel="stylesheet" href="../../css/vehicle/vehicle.css">
-  
 </head>
 <body>
-  <div id="=header-container"></div>
+  <div id="header-container"></div>
   <main>
-  <div id="alert-container"></div> 
-  <form id="updateForm" class="form-box">
-    <input type="text" name="make" readonly>
-    <input type="text" name="model" readonly>
-    <input type="number" name="year" readonly>
-    <input type="text" name="registration_number" readonly>
-    <input type="text" name="color" placeholder="Update Color" required>
-    <div class="actions">
-      <button type="submit">Update</button>
-      <button type="button" onclick="window.close()">Close</button>
-    </div>
-  </form>
+    <div id="alert-container"></div> 
 
-  <script type="module" src="../../js/vehicle/update.js"></script>
-</main>
+    <form id="updateForm" class="form-box" style="font-family: ui-sans-serif;">
+  <div class="form-group">
+    <label for="make">Brand :</label>
+    <input type="text" name="make" id="make" readonly>
+  </div>
 
- <script type="module" src="../../js/main.js"></script>
-<div id="=footer-container"></div>
+  <div class="form-group">
+    <label for="model">Model :</label>
+    <input type="text" name="model" id="model" readonly>
+  </div>
+
+  <div class="form-group">
+    <label for="year">Year :</label>
+    <input type="number" name="year" id="year" readonly>
+  </div>
+
+  <div class="form-group">
+    <label for="registration_number">Registration No. :</label>
+    <input type="text" name="registration_number" id="registration_number" readonly>
+  </div>
+
+  <div class="form-group">
+    <label font-st for="color">Color :</label>
+    <input type="text" name="color" id="color" placeholder="Update Color" required>
+  </div>
+
+  <div class="actions">
+    <button type="submit">Update</button>
+    <button type="button" onclick="window.location.href='myvehicles.html'">Close</button>
+  </div>
+</form>
+
+
+    <script type="module" src="../../js/vehicle/update.js"></script>
+  </main>
+
+  <script type="module" src="../../js/main.js"></script>
+  <div id="footer-container"></div>
 </body>
 </html>
