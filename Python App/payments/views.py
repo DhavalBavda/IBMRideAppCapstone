@@ -112,7 +112,10 @@ class CheckoutPageView(APIView):
 
 class CompletedPaymentsView(ListAPIView):
     serializer_class = PaymentSerializer
-
+    
     def get_queryset(self):
-        return Payment.objects.filter(status='SUCCESS')
-
+        queryset = Payment.objects.filter(status='SUCCESS')
+        wallet_id = self.kwargs.get('wallet_id', None)
+        if wallet_id:
+            queryset = queryset.filter(wallet_id=wallet_id)
+        return queryset

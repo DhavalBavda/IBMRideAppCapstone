@@ -114,28 +114,27 @@ class Withdraw_Oprs(APIView):
         if not new_status:
             return Response({'details': 'Status is required'}, status=status.HTTP_400_BAD_REQUEST)
 
-        # ✅ Update status
-        withdrawal.status = new_status
+        withdrawal.status = new_status.strip()
         withdrawal.save()
 
         wallet = withdrawal.wallet
+        withdrawal_amount = Decimal(withdrawal.amount)
+        if wallet.actual_balance >= withdrawal_amount:
+            wallet.actual_balance -= withdrawal_amount
+            print(wallet.actual_balance)
+            wallet.save()
+        else:
 
-        # ✅ Deduct only if status is COMPLETED
-        if new_status.upper() == "COMPLETED":
-            if wallet.actual_balance >= withdrawal.amount:
-                wallet.actual_balance -= withdrawal.amount
-                wallet.save()
-
-            
-            else:
-                return Response(
-                    {"details": "Insufficient wallet balance to complete withdrawal"},
-                    status=status.HTTP_400_BAD_REQUEST
-                )
+            return Response(
+                     {"details": "Insufficient wallet balance to complete withdrawal"},
+                        status=status.HTTP_400_BAD_REQUEST
+                    )
 
         serializer = WithdrawSerializer(withdrawal)
-        return Response(serializer.data, status=status.HTTP_200_OK)
-
+        return Response({
+            "withdrawal": serializer.data,
+            "wallet_balance": str(wallet.actual_balance)
+        }, status=status.HTTP_200_OK)
 
 
 
