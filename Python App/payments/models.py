@@ -2,6 +2,9 @@ from django.db import models
 from decimal import Decimal, ROUND_DOWN
 import uuid
 
+
+
+#  Payment Model 
 class Payment(models.Model):
     PAYMENT_METHOD_CHOICES = [
         ('CARD', 'Card'),

@@ -2,6 +2,8 @@ from rest_framework import serializers
 from .models import Payment
 from wallet.models import Wallet
 
+
+# create a Order SErializer 
 class CreateOrderSerializer(serializers.Serializer):
     # wallet_id = serializers.UUIDField()
     ride_id = serializers.UUIDField()
@@ -20,11 +22,16 @@ class CreateOrderSerializer(serializers.Serializer):
             raise serializers.ValidationError("Amount must be greater than zero")
         return value
 
+
+# Varify Payment Serializer 
 class VerifyPaymentSerializer(serializers.Serializer):
     razorpay_order_id = serializers.CharField(min_length=10)
     razorpay_payment_id = serializers.CharField(min_length=10)
     razorpay_signature = serializers.CharField(min_length=10)
 
+
+
+# Payment Serializer 
 class PaymentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Payment

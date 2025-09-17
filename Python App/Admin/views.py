@@ -13,11 +13,7 @@ from .serializers import AdminSerializer, AdminLoginSerializer,AdminUpdateSerial
 from rest_framework.permissions import AllowAny 
 
 load_dotenv()
-
-@api_view(['GET'])
-def Hello(request):
-    return Response({"message": "Hello! This is the Admin API endpoint."})
-
+ 
 
 # Register Admin
 class RegisterAdminView(generics.CreateAPIView):
@@ -38,6 +34,7 @@ class LoginAdminView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+# Admin Update View 
 class AdminDetailView(generics.RetrieveUpdateAPIView):
     queryset = Admin.objects.all()
     serializer_class = AdminUpdateSerializer
