@@ -12,6 +12,7 @@ import uuid
 from django.utils import timezone
 from rest_framework.generics import ListAPIView
 from .serializers import PaymentSerializer
+from django.shortcuts import get_object_or_404
 
 
 load_dotenv()
@@ -116,3 +117,11 @@ class CompletedPaymentsView(ListAPIView):
     def get_queryset(self):
         return Payment.objects.filter(status='SUCCESS')
 
+class GetPaymentDetails(APIView):
+    def get(self, request, ride_id=None):
+        if ride_id:
+            payment = Payment.objects.filter(ride_id=ride_id).first()
+            serializer = PaymentSerializer(payment)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        else:
+            return Response({"error": "Ride ID is required"}, status=status.HTTP_400_BAD_REQUEST)
