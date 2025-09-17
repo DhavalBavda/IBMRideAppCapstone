@@ -22,47 +22,6 @@ class Wallet(models.Model):
             self.a_deduct = 0
             self.save()
 
-
-
-
-
-
-
-
-
-
-# Trasaction Model
-class Transaction(models.Model):
-    TRANSACTION_TYPE_CHOICES = [
-        ('CREDIT', 'Credit'),
-        ('DEBIT', 'Debit'),
-    ]
-
-    transaction_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    wallet = models.ForeignKey(Wallet, on_delete=models.CASCADE, related_name='transactions')
-    transaction_type = models.CharField(max_length=10, choices=TRANSACTION_TYPE_CHOICES)
-    amount = models.DecimalField(max_digits=12, decimal_places=2)
-    reference_payment = models.ForeignKey("payments.Payment", null=True, blank=True, on_delete=models.SET_NULL)
-    description = models.TextField(blank=True, null=True)  
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return f"{self.transaction_type} - {self.amount} ({self.wallet.wallet_id})"
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 # Withdrwaable Model
 class Withdraw(models.Model):
     WITHDRAW_STATUS_CHOICES = [

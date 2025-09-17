@@ -8,10 +8,10 @@ from django.shortcuts import get_object_or_404
 
  
 from decimal import Decimal
-# Create your views here.
-def Hello(request):
-    return HttpResponse("<H1>Hello This is the Wallet Apis End Point</h1>")
+ 
 
+
+# all the apis with single view
 class Wallet_Oprs(APIView):
     def get(self, request, driver_id=None):
         if driver_id:  # If a driver_id is provided, return that wallet
@@ -66,13 +66,12 @@ class Withdraw_Oprs(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     # Create a new withdrawal request
-   
     def post(self, request, driver_id):
         wallet = Wallet.objects.filter(driver_id=driver_id).first()
         if not wallet:
             return Response({'details': 'Wallet Not Found'}, status=status.HTTP_404_NOT_FOUND)
 
-        # ✅ Safely convert amount to float (or Decimal)
+        # Safely convert amount to float (or Decimal)
         try:
             amount = float(request.data.get('amount', 0))
         except (TypeError, ValueError):
@@ -87,14 +86,14 @@ class Withdraw_Oprs(APIView):
                 status=status.HTTP_400_BAD_REQUEST
             )
 
-        # ✅ Check if there is already a pending withdrawal request
+        # Check if there is already a pending withdrawal request
         if Withdraw.objects.filter(wallet=wallet, status="REQUESTED").exists():
             return Response(
                 {"details": "Wait for the completion or rejection of the request you already made."},
                 status=status.HTTP_400_BAD_REQUEST
             )
 
-        # ✅ Create withdrawal
+        # Create withdrawal
         withdrawal = Withdraw.objects.create(
             wallet=wallet,
             amount=amount,
@@ -107,6 +106,8 @@ class Withdraw_Oprs(APIView):
 
         serializer = WithdrawSerializer(withdrawal)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
+    
+    # Update Withdraw Request 
     def patch(self, request, withdraw_id):
         withdrawal = get_object_or_404(Withdraw, withdraw_id=withdraw_id)
         new_status = request.data.get('status')
@@ -138,7 +139,7 @@ class Withdraw_Oprs(APIView):
 
 
 
-
+# Admin Bonus view 
 class Admin_Bonus(APIView):
     def post(self, request, wallet_id=None):
         try:

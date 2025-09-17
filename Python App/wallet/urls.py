@@ -1,9 +1,10 @@
 
 from django.urls import path
-from .views import Hello,Wallet_Oprs,Withdraw_Oprs,Admin_Bonus
+from .views import Wallet_Oprs,Withdraw_Oprs,Admin_Bonus
 
 urlpatterns = [
-    path('',Hello,name="hello"),
+     
+    
     path('driver-wallet/', Wallet_Oprs.as_view(),name='get-all-wallet'),
     path('driver-wallet/<uuid:driver_id>/', Wallet_Oprs.as_view(), name="wallet-operations"),
      

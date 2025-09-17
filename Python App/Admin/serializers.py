@@ -3,6 +3,7 @@ from .models import Admin
 from django.contrib.auth.hashers import make_password, check_password
 
 
+# Admin Serializer Which can Used To Serialize The Data From Backend To Frontend And Frontend To Backend
 class AdminSerializer(serializers.ModelSerializer):
     class Meta:
         model = Admin
@@ -21,6 +22,7 @@ class AdminSerializer(serializers.ModelSerializer):
         return super(AdminSerializer, self).update(instance, validated_data)
 
 
+# Admin Login Serializer Which can Used login and Validations
 class AdminLoginSerializer(serializers.Serializer):
     email = serializers.EmailField()
     password = serializers.CharField()
@@ -37,7 +39,8 @@ class AdminLoginSerializer(serializers.Serializer):
         return admin
 
 
+# Admin Update Serializer Which can Used To Update The data
 class AdminUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Admin
-        fields = ['name', 'phone']  # Only allow updating these
+        fields = ['name', 'phone'] 

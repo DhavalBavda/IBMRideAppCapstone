@@ -15,13 +15,18 @@ from .serializers import PaymentSerializer
 from django.shortcuts import get_object_or_404
 
 
+# Load .env 
 load_dotenv()
 
+
+# Get Thigns From The .Env Files 
 RAZORPAY_KEY_ID = os.getenv('RAZORPAY_KEY_ID')
 RAZORPAY_KEY_SECRET = os.getenv('RAZORPAY_KEY_SECRET')
 
 razorpay_client = razorpay.Client(auth=(RAZORPAY_KEY_ID, RAZORPAY_KEY_SECRET))
 
+
+# Create Order View 
 class CreateOrderView(APIView):
     permission_classes = []  # Allow any
     authentication_classes = []  # No authentication required
@@ -68,6 +73,7 @@ class CreateOrderView(APIView):
             return Response({"error": str(e)}, status=400)
 
 
+# Varify Payment
 class VerifyPaymentView(APIView):
     def post(self, request):
         serializer = VerifyPaymentSerializer(data=request.data)
@@ -107,10 +113,13 @@ class VerifyPaymentView(APIView):
         except Exception as e:
             return Response({"error": str(e), "status": "FAILED"}, status=status.HTTP_400_BAD_REQUEST)
 
+# Check out Page view 
 class CheckoutPageView(APIView):
     def get(self, request):
         return render(request, 'payments/checkout.html')
 
+
+# Get Completed PAyments By id Or Without Id 
 class CompletedPaymentsView(ListAPIView):
     serializer_class = PaymentSerializer
     
@@ -122,6 +131,7 @@ class CompletedPaymentsView(ListAPIView):
         return queryset
          
 
+#  Get Payment Details 
 class GetPaymentDetails(APIView):
     def get(self, request, ride_id=None):
         if ride_id:

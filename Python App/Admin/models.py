@@ -1,6 +1,8 @@
 from django.db import models
 import uuid
 
+
+# Admin Model To Store Admin
 class Admin(models.Model):
     admin_id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     name = models.CharField(max_length=100, null=False)

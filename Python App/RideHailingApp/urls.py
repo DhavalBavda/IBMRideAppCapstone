@@ -17,6 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
+#  Connection of all the Apps Urls 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('payments/',include('payments.urls')),
