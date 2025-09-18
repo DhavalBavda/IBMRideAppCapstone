@@ -171,6 +171,7 @@ export async function loadRequestedRides() {
                         <p><strong>Drop:</strong> ${ride.dropoff_address}</p>
                         <p><strong>Ride Status:</strong> ${ride.ride_status}</p>
                         <p><strong>Fare:</strong> ₹ ${fareToShow}</p>
+                        <p><strong>OTP:</strong> ${ride.otp}</p>
                         ${ride.Driver ? `<p><strong>Driver:</strong> ${ride.Driver.firstname} ${ride.Driver.lastname}</p>` : ""}
                         ${ride.Driver ? `<p><strong>Phone:</strong> ${ride.Driver.phone}</p>` : ""}
                         ${ride.Vehicle ? `<p><strong>Vehicle Model:</strong> ${ride.Vehicle.model} </p>` : ""}
