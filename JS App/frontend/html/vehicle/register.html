@@ -16,13 +16,35 @@
  
   <div id="alert-container"></div>
 
-  <form id="registerVehicle" class="form-box">
-    <input type="text" name="make" placeholder="Brand" required>
-    <input type="text" name="model" placeholder="Model" required>
-    <input type="number" min="1900" max="2099" step="1" name="year" placeholder="Year" required>
-    <input type="text" name="color" placeholder="Color" required>
-    <input type="text" name="registration_number" placeholder="Registration Number" required>
-    <select name="vehicle_type" required>
+  <form id="registerVehicle" class="form-box" style="font-family: ui-sans-serif;">
+  <div class="form-group">
+    <label for="make">Brand :</label>
+    <input type="text" name="make" id="make" placeholder="brand" required>
+  </div>
+
+  <div class="form-group">
+    <label for="model">Model :</label>
+    <input type="text" name="model" id="model" placeholder="model"required>
+  </div>
+
+  <div class="form-group">
+    <label for="year">Year :</label>
+    <input type="number" min="1900" max="2099" step="1" name="year" id="year" placeholder="year" required>
+  </div>
+
+  <div class="form-group">
+    <label for="color">Color :</label>
+    <input type="text" name="color" id="color" placeholder="color" required>
+  </div>
+
+  <div class="form-group">
+    <label for="registration_number">Registration No. :</label>
+    <input type="text" name="registration_number" id="registration_number" placeholder="Enter vehicle registration number"required>
+  </div>
+
+  <div class="form-group">
+    <label for="vehicle_type">Vehicle Type :</label>
+    <select name="vehicle_type" id="vehicle_type" required>
       <option value="">Select Type</option>
       <option value="hatchback">Hatchback</option>
       <option value="sedan">Sedan</option>
@@ -30,16 +52,19 @@
       <option value="auto">Auto</option>
       <option value="bike">Bike</option>
     </select>
-    <div class="actions">
-      <button type="submit">Register</button>
-      <button type="button" 
-    onclick="window.location.href='../../html/vehicle/my-vehicle.html'" 
-    style="padding:10px 20px; background:#000000; color:white; border:none; border-radius:6px; cursor:pointer; font-size:16px;">
+  </div>
+
+  <div class="actions">
+  <button type="submit">Register</button>
+    <button type="button" 
+    onclick="window.location.href='../../html/vehicle/my-vehicle.html'" >
     ←
-  </button>
-      <button type="reset">Clear</button>
-    </div>
-  </form>
+  </button> 
+  <button type="reset">Clear</button>
+
+</div>
+</form>
+
   
   <script type="module" src="../../js/user/auth-utils.js"></script>
 <script type="module" src="../../js/vehicle/vehicleregister.js"></script>
