@@ -1,7 +1,7 @@
 import HelperFunction from "../../utils/HelperFunction.js";
 
 class WithdrawWalletService {
-  async getAllWithdrawReqDetails() {
+  async getAllWithdrawReqDetails(req) {
      
     const apiResponseData = await HelperFunction.axiosSendRequest(
       "get",
@@ -12,7 +12,7 @@ class WithdrawWalletService {
     return apiResponseData;
   }
 
-  async getAllWithdrawReqByidDetails() {
+  async getAllWithdrawReqByidDetails(req) {
      const { driver_id } = req.params;
     const apiResponseData = await HelperFunction.axiosSendRequest(
       "get",
@@ -21,7 +21,7 @@ class WithdrawWalletService {
     return apiResponseData;
   }
 
-  async postAllWithdrawReqByidDetails() {
+  async postAllWithdrawReqByidDetails(req) {
      const { driver_id } = req.params;
      const {amount,account_holder_name,bank_name,ifsc_code,account_number,contact_info}=req.body;
      if (!amount || !account_holder_name||!bank_name||!ifsc_code||!account_number||!contact_info) {

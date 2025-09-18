@@ -12,6 +12,12 @@ class PaymentController {
             .json(result);
         
     });
+    
+    createCashPayment = asyncHandler(async (req, res) => {
+    const result = await PaymentService.createCashPayment(req);
+    return res.status(201).json(result);
+    });
+
 
     verifyPaymentStatus = asyncHandler(async (req, res) => {
        

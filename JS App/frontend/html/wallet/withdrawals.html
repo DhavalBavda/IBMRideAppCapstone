@@ -1,0 +1,129 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Withdrawals</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: "Neue Machina", Arial, sans-serif;
+        }
+
+        @font-face {
+            font-family: "Neue Machina";
+            src: url("../../assets/fonts/NeueMachina-Ultrabold.otf") format("opentype");
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        body {
+            font-family: "Neue Machina", Arial, sans-serif;
+            background-color: #f5f6fa;
+            margin: 0;
+            padding: 0;
+            width: 100vw;
+            min-height: 100vh;
+        }
+
+        .wallet-details {
+            background-color: white;
+            color: black;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 50px auto;
+            max-width: 90%;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            border: 2px solid #000;
+            position: relative;
+        }
+
+        .wallet-details h3 {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+            font-size: 14px;
+        }
+
+        th {
+            background-color: #54659f;
+            color: white;
+        }
+
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        .status-active {
+            color: #00c853;
+            font-weight: bold;
+        }
+
+        .status-inactive {
+            color: #d32f2f;
+            font-weight: bold;
+        }
+
+        .pagination {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .pagination button {
+            margin: 0 5px;
+            padding: 8px 12px;
+            border: none;
+            background-color: #54659f;
+            color: white;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .pagination button.disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+    <div id="header-container"></div>
+
+    <div class="wallet-details">
+        <h3>Withdrawal Details</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Sl no</th>
+                    <th>Account Holder</th>
+                    <th>Account Number</th>
+                    <th>Amount</th>
+                    <th>Bank Name</th>
+                    <th>IFSC Code</th>
+                    <th>Contact Info</th>
+                    <th>Status</th>
+                    <th>Created At</th>
+                </tr>
+            </thead>
+            <tbody id="withdrawals-body">
+                <!-- Dynamic rows will be inserted here -->
+            </tbody>
+        </table>
+        <div class="pagination" id="pagination-controls"></div>
+    </div>
+
+    <div id="footer-container"></div>
+
+    <script type="module" src="../../js/main.js"></script>
+    <script type="module" src="../../js/wallet/withdrawals.js"></script>
+</body>
+</html>

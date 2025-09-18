@@ -3,7 +3,6 @@ const params = new URLSearchParams(window.location.search);
     console.log("Clicked Now");
 
     const payload = {
-        wallet_id: "b6260927-a693-4e96-8c74-9fb7ba67c16d",
         ride_id: params.get("rideId"),
         rider_id: params.get("riderId"),
         driver_id: params.get("driverId"),
@@ -41,13 +40,15 @@ const params = new URLSearchParams(window.location.search);
                             razorpay_order_id: res.razorpay_order_id,
                             razorpay_payment_id: res.razorpay_payment_id,
                             razorpay_signature: res.razorpay_signature,
-                            payment_id: data.payment_id  // Pass the exact Payment ID
+                            payment_id: data.payment_id , // Pass the exact Payment ID
+                            ride_id: payload.ride_id  
                         })
                     });
 
                     const verifyData = await verifyResponse.json();
                     if (verifyResponse.ok) {
-                        alert("Payment successful: " + verifyData.message);
+                        // alert("Payment successful: " + verifyData.message);
+                        window.location.href = `/html/ride/ride.html?rideId=${payload.ride_id}&status=success&fare=${payload.amount}`;
                     } else {
                         alert("Payment verification failed: " + (verifyData.error || "Unknown error"));
                     }
@@ -71,5 +72,35 @@ const params = new URLSearchParams(window.location.search);
     } catch (error) {
         console.error("Error creating order:", error.response || error.message || error);
         alert("An error occurred while creating order.");
+    }
+};
+
+document.getElementById("cashbtn").onclick = async function() {
+    const params = new URLSearchParams(window.location.search);
+
+    const payload = {
+        ride_id: params.get("rideId"),
+        rider_id: params.get("riderId"),
+        driver_id: params.get("driverId"),
+        amount: params.get("fare")
+    };
+
+    try {
+        const response = await fetch("/payment/cash-payment", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload)
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+            window.location.href = `/html/ride/ride.html?rideId=${payload.ride_id}&status=success&fare=${payload.amount}`;
+        } else {
+            alert("Cash payment failed: " + (data.error || "Unknown error"));
+        }
+    } catch (err) {
+        console.error("Error creating cash payment:", err);
+        alert("Cash payment error");
     }
 };

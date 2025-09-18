@@ -1,3 +1,10 @@
+document.addEventListener("DOMContentLoaded", () => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("status") === "success") {
+        alert(`🎉 Payment successful for Ride ${params.get("rideId")}, Fare: ₹${params.get("fare")}`);
+    }
+});
+
 const apiKey = "j21hFbZv2E0RTPmoyaSngSwC7C2WBGM3"; // Your TomTom API key
 
 class UberMapService {

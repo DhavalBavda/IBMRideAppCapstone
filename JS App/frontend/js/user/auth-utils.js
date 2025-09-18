@@ -26,6 +26,13 @@ export class AuthUtils {
 
 
     // driver-dashboard
+    getActiveVehicle : `${this.BASE_URL}/vehicle/active-vehicle`,
+    getDriverWalletDetails : `${this.BASE_URL}/wallet/driver-wallet/:driver_id`,
+    getOngoingRidesDriver : `${this.BASE_URL}/ride/ongoing/driver`,
+    setDriverAvailableForRide : `${this.BASE_URL}/user/set-available`,
+    withdrawAmount : `${this.BASE_URL}/wallet/withdraw/:driver_id`,
+    getPaymentsforWallet : `${this.BASE_URL}/analysis/get-payment/:wallet_id`,
+    
     getActiveVehicle: `${this.BASE_URL}/vehicle/active-vehicle`,
     getDriverWalletDetails: `${this.BASE_URL}/wallet/driver-wallet/:driver_id`,
     getOngoingRidesDriver: `${this.BASE_URL}/ride/ongoing/driver`,

@@ -6,10 +6,10 @@ class PaymentService {
 
     async createCheckout(reqObj){
         
-        const { ride_id, wallet_id, rider_id, driver_id, amount, payment_method } = reqObj.body;
+        const { ride_id, rider_id, driver_id, amount, payment_method } = reqObj.body;
 
         if (!ride_id) { throw new ApiError(400, "Missing the ride id"); }
-        if (!wallet_id) { throw new ApiError(400, "Missing the wallet id"); }
+        //if (!wallet_id) { throw new ApiError(400, "Missing the wallet id"); }
         if (!rider_id) { throw new ApiError(400, "Missing the rider id"); }
         if (!driver_id) { throw new ApiError(400, "Missing the driver id"); }
         if (!amount) { throw new ApiError(400, "Missing the amount"); }
@@ -17,7 +17,6 @@ class PaymentService {
 
         const payload = {
             ride_id,
-            wallet_id,
             rider_id,
             driver_id,
             amount,
@@ -43,12 +42,14 @@ class PaymentService {
         if (!razorpay_payment_id) { throw new ApiError(400, "Missing razorpay_payment_id"); }
         if (!razorpay_signature) { throw new ApiError(400, "Missing razorpay_signature"); }
         if (!payment_id) { throw new ApiError(400, "Missing payment_id"); }
+        if (!ride_id) {throw new ApiError(400,"Missing ride_id"); }
 
         const payload = {
             razorpay_order_id,
             razorpay_payment_id,
             razorpay_signature,
-            payment_id
+            payment_id,
+            ride_id
         };
 
         const apiResponseData = await HelperFunction.axiosSendRequest("post", `payments/verify-payment/`, payload);
@@ -81,6 +82,35 @@ class PaymentService {
 
         return apiResponseData;
     }
+
+    async createCashPayment(reqObj) {
+    const { ride_id, rider_id, driver_id, amount } = reqObj.body;
+
+    if (!ride_id || !rider_id || !driver_id || !amount) {
+        throw new ApiError(400, "Missing required data for cash payment");
+    }
+
+    const payload = { ride_id, rider_id, driver_id, amount, payment_method: "CASH" };
+
+    const apiResponseData = await HelperFunction.axiosSendRequest(
+        "post",
+        "payments/cash-payment/", 
+        payload
+    );
+    
+    let pay_status;
+
+        if (apiResponseData.status === "SUCCESS") { 
+            pay_status = "completed" ;
+        } else {
+            pay_status = "failed";
+        }
+
+        await RideRepository.updatePaymentStatus(ride_id, pay_status);
+
+    return apiResponseData;
+}
+
 
 }
 export default new PaymentService();
