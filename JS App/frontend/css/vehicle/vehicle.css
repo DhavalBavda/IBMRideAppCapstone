@@ -14,18 +14,18 @@ html, body {
   flex-direction: column;
 }
 
+
 #header-container {
-  flex-shrink: 0; /* header stays */
+  flex-shrink: 0;
 }
 
 #footer-container {
-  flex-shrink: 0; /* footer stays */
+  flex-shrink: 0; 
 }
 
 main, .content {
-  flex: 1; /* content expands to push footer down */
-}
-
+  flex: 1; 
+} 
 
 nav {
   display: flex;
@@ -104,11 +104,6 @@ nav a.active {
 }
 
 /* ----------------- Header + Status ----------------- */
-.vehicle-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
 
 .vehicle-type {
   font-size: 1.1rem;
@@ -119,6 +114,7 @@ nav a.active {
 .status-label {
   font-weight: bold;
   font-size: 14px;
+  align-items: flex-end;
 }
 
 .status-label.active {
@@ -138,6 +134,24 @@ nav a.active {
   margin: 5px 0;
   font-size: 0.9rem;
   color: #333;
+}
+
+.vehicle-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; 
+}
+
+.vehicle-type {
+  font-size: 1.1rem;
+  font-weight: bold;
+  margin: 0;
+  text-align: left;
+}
+
+.status-label {
+  font-weight: bold;
+  font-size: 14px;
 }
 
 .vehicle-reg {
@@ -310,17 +324,11 @@ nav a.active {
   object-fit: contain;
 }
 
-.vehicle-header {
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-  margin-top: 5px;
-}
 
 .vehicle-type {
   font-size: 1.2rem;
   font-weight: bold;
-  margin: 0;
+  text-align: left;
 }
 
 .status {
