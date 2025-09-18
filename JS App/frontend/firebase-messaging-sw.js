@@ -55,6 +55,21 @@ self.addEventListener("notificationclick", (event) => {
           headers: { "Content-Type": "application/json" }
         });
 
+        // // Send message to MAIN THREAD to emit socket event
+        // const allClients = await clients.matchAll({ type: 'window' });
+        // if (allClients.length > 0) {
+        //   allClients[0].postMessage({
+        //     type: 'joinRideRoom',
+        //     ride_id: notificationData.ride_id,
+        //     payload: notificationData  // Send full data if needed
+        //   });
+        // }
+        //  else {
+        //   // No open window: open one and pass ride ID in URL as fallback
+        //   await clients.openWindow(`/html/driver/driver-dashboard.html?ride_id=${notificationData.ride_id}`);
+        // }
+
+
         await clients.openWindow("/html/driver/driver-dashboard.html");
 
       } else if (event.action === "ignoreRide") {

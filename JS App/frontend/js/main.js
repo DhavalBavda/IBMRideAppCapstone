@@ -2,6 +2,11 @@ import { AuthUtils } from "../js/user/auth-utils.js";
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
 // import { getMessaging, getToken, onMessage, onTokenRefresh } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-messaging.js";
 import { getMessaging, getToken, onMessage } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-messaging.js";
+// import socket from "./socket.js";
+
+// socket.on('connect', () => {
+//   console.log('Socket connected in MAIN THREAD');
+// });
 
 console.log("mani");
 
@@ -391,3 +396,18 @@ window.addEventListener("newRideRequest", (event) => {
     }
   }
 });
+
+
+
+// // Listen for messages from service worker
+// navigator.serviceWorker.addEventListener('message', (event) => {
+//   const { type, ride_id, payload } = event.data;
+
+//   if (type === 'joinRideRoom') {
+//     console.log(`Joining ride room: ride_${ride_id}`);
+//     socket.emit('joinRideRoom', ride_id);
+
+//     // Emit ride update
+//     socket.emit('rideUpdate', payload); // or payload.ride_id, etc.
+//   }
+// });

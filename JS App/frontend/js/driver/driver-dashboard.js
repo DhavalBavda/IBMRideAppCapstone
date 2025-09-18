@@ -1,11 +1,24 @@
 import { AuthUtils } from "../user/auth-utils.js";
 import socket from "../socket.js";
 
+// const urlParams = new URLSearchParams(window.location.search);
+// const rideId = urlParams.get('ride_id');
+
+// if (rideId) {
+//   console.log("Ride ID from URL:", rideId);
+
+//   // Now connect to socket and emit join
+//   socket.emit('joinRideRoom', rideId);
+//   socket.to(`ride_${rideId}`).emit('rideUpdate', rideId);
+// }
+
 socket.on('rideUpdate', async (data) => {
     try {
         console.log("in here th eovker");
         
-        await refreshRideCard();
+        setTimeout(async () => {
+            await refreshRideCard();
+        }, 100);
     } catch (error) {
         console.error(error);
     }
@@ -46,7 +59,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         if (vehicleRes.success && vehicleRes.data?.data) {
             const vehicle = vehicleRes.data.data;
             const vehicleInfoElement = document.querySelector(
-                ".cards .card:nth-child(1) p"
+                ".card p"
             );
             if (vehicleInfoElement) {
                 vehicleInfoElement.textContent = `${vehicle.make} ${vehicle.model} (${vehicle.registration_number})`;
@@ -65,11 +78,11 @@ document.addEventListener("DOMContentLoaded", async function () {
             const availableElement = document.getElementById("wallet-available");
             if (totalElement) {
                 totalElement.textContent =
-                    wallet.totalBalance?.toLocaleString("en-IN") || "0";
+                    wallet.total_balance?.toLocaleString("en-IN") || "0";
             }
             if (availableElement) {
                 availableElement.textContent =
-                    wallet.actualBalance?.toLocaleString("en-IN") || "0";
+                    wallet.actual_balance?.toLocaleString("en-IN") || "0";
             }
         }
 
@@ -195,6 +208,7 @@ function toggleRideUI(status) {
     [otpField, arrivedBtn, startBtn, cancelReasonInput, cancelBtn, completeBtn, mapLinkBtn].forEach(
         (el) => el?.classList.add("hidden")
     );
+    document.querySelector(".ride-actions").classList.remove("hidden");
     
 
     switch (status) {
@@ -362,7 +376,9 @@ async function acceptRide(rideId) {
         if (res.ok) {
             socket.emit("joinRideRoom", rideId);
             alert("Ride accepted!");
-            await refreshRideCard();
+            setTimeout(async () => {
+                await refreshRideCard();
+            }, 100);
         }
     } catch (err) {
         console.error("Accept ride error:", err);

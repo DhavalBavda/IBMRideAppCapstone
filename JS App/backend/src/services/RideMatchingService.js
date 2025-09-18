@@ -36,7 +36,7 @@ class RideMatchingService {
     }
 
     // search for the drivers in the area
-    async searchForDrivers(lat, lon, rideId, rideData, radius = 5000, timeout = 5 * 60 * 1000) {
+    async searchForDrivers(lat, lon, rideId, rideData, radius = 3000, timeout = 5 * 60 * 1000) {
 
         const ignoredDriversSet = new Set(await this.getIgnoredDrivers(rideId)); // Initialize ignored drivers set
 
@@ -153,12 +153,26 @@ class RideMatchingService {
 
                 try {
                     // Parse lines and remove empty lines
-                    const drivers = stdout.split('\n')
-                        .map(line => line.trim())
-                        .filter(line => line.startsWith('- '))
-                        .map(line => line.slice(2).trim());
+                    // const drivers = stdout.split('\n')
+                    //     .map(line => line.trim())
+                    //     .filter(line => line.startsWith('- '))
+                    //     .map(line => line.slice(2).trim());
 
-                    resolve(drivers);
+                    // Split the output by new lines, then extract the driver ID from each line
+                    const driverIds = stdout
+                        .split('\n')                    // Split by lines
+                        .map(line => line.trim())        // Trim each line
+                        .filter(line => line.startsWith('{ "driver_id": ')) // Only keep lines with driver IDs
+                        .map(line => {
+                            // Extract the driver ID using a regular expression
+                            const match = line.match(/"driver_id":\s?"([^"]+)"/);
+                            return match ? match[1] : null;  // Return the driver ID if found
+                        })
+                        .filter(id => id !== null);  // Remove any null entries
+
+                    console.log('Driver IDs:', driverIds);
+
+                    resolve(driverIds);
                 } catch (parseErr) {
                     reject(parseErr);
                 }

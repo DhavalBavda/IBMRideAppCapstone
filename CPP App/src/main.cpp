@@ -25,9 +25,21 @@ int main(int argc, char* argv[]) {
         }
         auto results = service.findNearbyDrivers(argv[2], std::stod(argv[3]),
                                                  std::stod(argv[4]), std::stod(argv[5]), argv[6]);
-        for (auto& driver : results) {
-            std::cout << " - " << driver << "\n";
-        }
+        // for (auto& driver : results) {
+            // std::cout << " - " << driver << "\n";
+            std::cout << "[\n";  // Start JSON array
+
+            bool first = true;
+            for (auto& driver : results) {
+                if (!first) {
+                    std::cout << ",\n";  // Separate drivers with a comma, but don't add a comma before the first driver
+                }
+                first = false;
+                std::cout << "  { \"driver_id\": \"" << driver << "\" }";  // Print each driver in JSON format
+            }
+
+            std::cout << "\n]";  // Close JSON array
+        // }
     }
 
     // Future: add "match" command for more advanced filtering

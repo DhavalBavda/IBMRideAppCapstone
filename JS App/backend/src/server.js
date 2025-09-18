@@ -16,7 +16,7 @@ const startServer = async () => {
     await mongoConnect();
     await checkMySqlConnection();
     await syncSqlDatabase();
-    // await redisClient.checkRedisConnection();
+    await redisClient.checkRedisConnection();
 
     // Create HTTP server
     const server = http.createServer(app);

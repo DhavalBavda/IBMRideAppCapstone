@@ -211,7 +211,7 @@ body {
   margin-top: 1rem;
 }
 .hidden {
-  display: none;
+  display: none !important;
 }
 
 #maps-link {
