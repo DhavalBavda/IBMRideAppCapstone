@@ -214,7 +214,7 @@ class RideRepository {
         return await Ride.findOne({
             where: {
                 rider_id: riderId,
-                ride_status: { [Op.in]: ["requested", "accepted", "ongoing"] },
+                ride_status: { [Op.in]: ["requested", "accepted", "ongoing", "driver_arrived"] },
             },
         });
     }

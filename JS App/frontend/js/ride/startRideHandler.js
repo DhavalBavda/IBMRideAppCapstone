@@ -1,4 +1,5 @@
 import { handleFareRide, handleRequestRide } from "./backendCoordinates.js";
+import { AuthUtils } from "../user/auth-utils.js";
 
 import socket from "../socket.js";
 
@@ -55,6 +56,12 @@ fareRideBtn.addEventListener('click', async () => {
 
 // Book Ride
 document.addEventListener('DOMContentLoaded', () => {
+    const loggedInUser = AuthUtils.getUserInfo();
+    if (!loggedInUser) {
+        window.location.href = "/html/user/login.html";
+        return;
+    }
+
     const modal = document.getElementById("rideModal");
     const closeModal = document.getElementById("closeModal");
 
@@ -117,14 +124,17 @@ export async function loadRequestedRides() {
             return;
         }
 
+        
+        
         const activeRides = data.data.filter(r =>
-            ["requested", "accepted", "ongoing"].includes(r.ride_status) ||
+            ["requested", "accepted", "ongoing", "driver_arrived"].includes(r.ride_status) ||
             (r.ride_status === "completed" && r.payment_status !== "completed")
         );
-
+        
         if (activeRides.length) {
             ridesList.innerHTML = "";
             activeRides.forEach(ride => {
+                socket.emit('joinRideRoom', ride.ride_id);
                 const rideEl = document.createElement("div");
                 rideEl.classList.add("ride-item");
 
@@ -223,6 +233,11 @@ export async function loadRequestedRides() {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
+    const loggedInUser = AuthUtils.getUserInfo();
+    if (!loggedInUser) {
+        window.location.href = "/html/user/login.html";
+        return;
+    }
     const refreshBtn = document.getElementById("refreshBtn");
 
     if (refreshBtn) {

@@ -78,8 +78,8 @@ export async function loadRideHistory() {
                 });
                 const payData = await payRes.json();
 
-                if (payRes.ok && payData.success && payData.data) {
-                    const p = payData.data;
+                if (payRes && payData) {
+                    const p = payData
                     paymentHtml = `
             <p><strong>Payment Status:</strong> ${p.status}</p>
             <p><strong>Payment Id:</strong> ${p.payment_id}</p>
