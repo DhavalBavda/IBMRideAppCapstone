@@ -375,13 +375,14 @@ async function acceptRide(rideId) {
         });
         if (res.ok) {
             socket.emit("joinRideRoom", rideId);
-            alert("Ride accepted!");
+            AuthUtils.showAlert(alertContainer, "Ride accepted!", "success", 3000);
             setTimeout(async () => {
                 await refreshRideCard();
             }, 100);
         }
     } catch (err) {
-        console.error("Accept ride error:", err);
+        console.log(err);
+        AuthUtils.showAlert(alertContainer, "Unexpected error while accepting ride.", "error", 3000);
     }
 }
 
@@ -393,9 +394,12 @@ async function ignoreRide(rideId) {
             body: JSON.stringify({ rideId: rideId })
         });
         if (res.ok) {
-            alert("Ride ignored.");
+            AuthUtils.showAlert(alertContainer, "Ride ignored.", "info", 3000);
+        } else {
+            AuthUtils.showAlert(alertContainer, "Failed to ignore ride. Please try again.", "error", 3000);
         }
     } catch (err) {
         console.error("Ignore ride error:", err);
+        AuthUtils.showAlert(alertContainer, "Unexpected error while ignoring ride.", "error", 3000);
     }
 }

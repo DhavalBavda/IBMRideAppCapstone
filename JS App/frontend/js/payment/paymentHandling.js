@@ -1,5 +1,5 @@
 document.getElementById("payBtn").onclick = async function () {
-const params = new URLSearchParams(window.location.search);
+    const params = new URLSearchParams(window.location.search);
     console.log("Clicked Now");
 
     const payload = {
@@ -19,7 +19,7 @@ const params = new URLSearchParams(window.location.search);
         });
         const data = await response.json();
         if (!response.ok) {
-            alert("Failed to create order: " + (data.error || "Unknown error"));
+            AuthUtils.showAlert(alertContainer, "Failed to create order: " + (data.error || "Unknown error"), "error", 3000);
             return;
         }
 
@@ -40,21 +40,21 @@ const params = new URLSearchParams(window.location.search);
                             razorpay_order_id: res.razorpay_order_id,
                             razorpay_payment_id: res.razorpay_payment_id,
                             razorpay_signature: res.razorpay_signature,
-                            payment_id: data.payment_id , // Pass the exact Payment ID
+                            payment_id: data.payment_id, // Pass the exact Payment ID
                             ride_id: payload.ride_id  
                         })
                     });
 
                     const verifyData = await verifyResponse.json();
                     if (verifyResponse.ok) {
-                        // alert("Payment successful: " + verifyData.message);
+                        // Payment successful, redirect user
                         window.location.href = `/html/ride/ride.html?rideId=${payload.ride_id}&status=success&fare=${payload.amount}`;
                     } else {
-                        alert("Payment verification failed: " + (verifyData.error || "Unknown error"));
+                        AuthUtils.showAlert(alertContainer, "Payment verification failed: " + (verifyData.error || "Unknown error"), "error", 3000);
                     }
                 } catch (err) {
                     console.error("Verification error:", err);
-                    alert("Error verifying payment.");
+                    AuthUtils.showAlert(alertContainer, "Error verifying payment.", "error", 3000);
                 }
             },
             prefill: {
@@ -71,11 +71,11 @@ const params = new URLSearchParams(window.location.search);
 
     } catch (error) {
         console.error("Error creating order:", error.response || error.message || error);
-        alert("An error occurred while creating order.");
+        AuthUtils.showAlert(alertContainer, "An error occurred while creating order.", "error", 3000);
     }
 };
 
-document.getElementById("cashbtn").onclick = async function() {
+document.getElementById("cashbtn").onclick = async function () {
     const params = new URLSearchParams(window.location.search);
 
     const payload = {
@@ -97,10 +97,10 @@ document.getElementById("cashbtn").onclick = async function() {
         if (response.ok) {
             window.location.href = `/html/ride/ride.html?rideId=${payload.ride_id}&status=success&fare=${payload.amount}`;
         } else {
-            alert("Cash payment failed: " + (data.error || "Unknown error"));
+            AuthUtils.showAlert(alertContainer, "Cash payment failed: " + (data.error || "Unknown error"), "error", 3000);
         }
     } catch (err) {
         console.error("Error creating cash payment:", err);
-        alert("Cash payment error");
+        AuthUtils.showAlert(alertContainer, "Cash payment error.", "error", 3000);
     }
 };
