@@ -48,29 +48,6 @@ export async function loadRideHistory() {
                    <p><strong>Reg. No:</strong> ${ride.Vehicle.registration_number}</p>`
                 : "<p><strong>Vehicle:</strong> Not Assigned</p>";
 
-            let paymentHtml = "<p><strong>Payment:</strong> Not available</p>";
-            try {
-                const payRes = await fetch(`http://localhost:3000/payment/paymentDetails/${ride.ride_id}`, {
-                    method: "GET",
-                    credentials: "include"
-                });
-                const payData = await payRes.json();
-                console.log(payData);
-
-                if (payRes.ok && payData.success && payData.data) {
-                    const p = payData.data; // Assuming { amount, method, status, txn_id, createdAt }
-                    paymentHtml = `
-                <p><strong>Payment Status:</strong> ${p.status}</p>
-                <p><strong>Amount:</strong> ₹ ${p.amount}</p>
-                <p><strong>Method:</strong> ${p.method}</p>
-                ${p.txn_id ? `<p><strong>Txn ID:</strong> ${p.txn_id}</p>` : ""}
-                <p><strong>Date:</strong> ${new Date(p.createdAt).toLocaleString()}</p>
-            `;
-                }
-            } catch (err) {
-                console.error(`❌ Failed to fetch payment details for ride ${ride.ride_id}:`, err);
-            }
-
             // Fetch rating
             let ratingHtml = "<p><strong>Rating:</strong> Not given</p>";
             let hasRated = false;
@@ -91,11 +68,36 @@ export async function loadRideHistory() {
                 console.error(`Failed to fetch rating for ride ${ride.ride_id}:`, err);
             }
 
+            // 🔹 Default payment html
+            let paymentHtml = "<p><strong>Payment:</strong> Not available</p>";
+
+            try {
+                const payRes = await fetch(`http://localhost:3000/payment/paymentDetails/${ride.ride_id}`, {
+                    method: "GET",
+                    credentials: "include"
+                });
+                const payData = await payRes.json();
+
+                if (payRes.ok && payData.success && payData.data) {
+                    const p = payData.data;
+                    paymentHtml = `
+            <p><strong>Payment Status:</strong> ${p.status}</p>
+            <p><strong>Payment Id:</strong> ${p.payment_id}</p>
+            <p><strong>Amount:</strong> ₹ ${String(p.amount).replace(/,/g, "")}</p>
+            <p><strong>Payment Method:</strong> ${p.payment_method}</p>
+            <p><strong>Created At:</strong> ${p.created_at}</p>
+        `;
+                }
+            } catch (err) {
+                console.error(`❌ Failed to fetch payment details for ride ${ride.ride_id}:`, err);
+            }
+
             rideEl.innerHTML = `
                 <p><strong>Pickup:</strong> ${ride.pickup_address}</p>
                 <p><strong>Drop:</strong> ${ride.dropoff_address}</p>
                 <p><strong>Ride Status:</strong> ${ride.ride_status}</p>
                 <p><strong>Payment Status:</strong> ${ride.payment_status}</p>
+                ${paymentHtml}
                 ${driverInfo}
                 ${vehicleInfo}
                 ${ratingHtml}
@@ -164,14 +166,15 @@ export async function loadRideHistory() {
 
 // Load ride history on DOMContentLoaded
 document.addEventListener("DOMContentLoaded", () => {
-    const historyList = document.getElementById("rideHistoryList");
-    if (historyList) {
-        loadRideHistory();
+    const refreshBtn = document.getElementById("refreshBtn");
 
-        setInterval(() => {
-            loadRideHistory();
-        }, 5000);
-    } else {
-        console.error("❌ rideHistoryList element not found in DOM");
+    if (refreshBtn) {
+        refreshBtn.addEventListener("click", () => {
+            console.log("🔄 Refreshing requested rides...");
+            loadRideHistory(); // call your existing function
+        });
     }
+
+    // Load rides initially
+    loadRideHistory();
 });

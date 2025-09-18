@@ -222,10 +222,16 @@ export async function loadRequestedRides() {
     }
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-    loadRequestedRides(); // initial load
+document.addEventListener("DOMContentLoaded", () => {
+    const refreshBtn = document.getElementById("refreshBtn");
 
-    setInterval(() => {
-        loadRequestedRides();
-    }, 5000);
+    if (refreshBtn) {
+        refreshBtn.addEventListener("click", () => {
+            console.log("🔄 Refreshing requested rides...");
+            loadRequestedRides(); // call your existing function
+        });
+    }
+
+    // Load rides initially
+    loadRequestedRides();
 });

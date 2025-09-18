@@ -568,6 +568,45 @@ header .logo {
     transform: translateY(0);
 }
 
+.refresh-btn {
+    background-color: #007bff;      /* Blue background */
+    color: white;                   /* White text */
+    font-size: 14px;
+    font-weight: 600;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 8px;             /* Rounded corners */
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+    margin-bottom: 10px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;                       /* space for icon */
+}
+
+/* Hover effect */
+.refresh-btn:hover {
+    background-color: #0056b3;      /* Darker blue */
+    transform: scale(1.05);         /* Slight zoom */
+}
+
+/* Optional: add a refresh icon (🔄) using CSS content */
+.refresh-btn::before {
+    content: "🔄";
+    font-size: 16px;
+}
+
+.requested-rides-header {
+    display: flex;
+    justify-content: space-between;  /* Push h2 left, button right */
+    align-items: center;             /* Align vertically */
+    margin-bottom: 10px;
+}
+
+.requested-rides-header h2 {
+    margin: 0; /* remove default spacing */
+}
+
 /* Responsive: stack on very narrow screens */
 @media (max-width: 420px) {
     .button-row {
