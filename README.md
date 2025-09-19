@@ -1,4 +1,4 @@
-# IBMRideAppCapstone
+# Ride-Hailing-App
 
 ## Third-Party Libraries
 
